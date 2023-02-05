@@ -382,9 +382,6 @@ body {
 .rc-anchor-logo-portrait {
   margin: 10px 0 0 26px;
   width: 58px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 .rc-anchor-logo-img-portrait {
@@ -392,12 +389,6 @@ body {
   height: 32px;
   margin: 0 13px 0 13px;
   width: 32px;
-}
-
-.rc-anchor-logo-landscape {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 .rc-anchor-logo-img-landscape {
@@ -1270,12 +1261,6 @@ td:focus {
 .rc-imageselect-challenge {
   box-sizing: border-box;
   text-align: center;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
-.rc-imageselect-target > div:hover {
 }
 
 .rc-imageselect-response-field-error {
