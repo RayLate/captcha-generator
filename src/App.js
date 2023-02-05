@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import useQueryAPI from './hook/useQueryAPI';
+import React, { useEffect } from 'react';
+import RForm from './components/ReCAPTCHA/RForm';
 
 function App() {
+  const { data } = useQueryAPI(
+    'http://165.22.253.200:9000/api/recaptcha/random',
+    1
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Question: {data.question}</h1>
+      <p>Result ID: {data.resultId}</p>
+      <p>Img URL: {data.img}</p>
+      <img src={`http://165.22.253.200:9000${data.img}`} alt='' />
+      <RForm />
     </div>
   );
 }
