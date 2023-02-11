@@ -1,5 +1,5 @@
 import React from 'react';
-import './Opener.css';
+// import './Opener.css';
 
 const Opener = () => {
   return (

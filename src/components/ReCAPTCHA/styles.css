@@ -1,0 +1,33 @@
+.recaptcha-container .reCAPTCHA-text {
+  color: #555;
+  font-size: 10px;
+}
+
+.recaptcha-container .rc-anchor-pt {
+  text-decoration: none;
+  color: #555;
+  font-size: 8px;
+}
+
+.recaptcha-container .rc-anchor-pt a:hover {
+  text-decoration: underline;
+  color: #555;
+}
+
+.recaptcha-container .recaptcha-checkbox {
+  border-radius: 2px;
+  background-color: #fff;
+  border: 2px solid #c1c1c1;
+}
+
+.recaptcha-container .recaptcha-checkbox:hover {
+  border-color: #adabab;
+  background-color: #dbdbdb;
+}
+
+.rc-image-tile-wrapper img {
+  position: relative;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}

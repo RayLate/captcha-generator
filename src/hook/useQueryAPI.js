@@ -6,13 +6,11 @@ const useQueryAPI = (url, id) => {
   let cancelRequest = false;
   useEffect(() => {
     if (!id || !url) return;
-    const payload = {
-      captchaId: id,
-    };
+    const captchaId = id;
 
     const fetchData = async () => {
       await axios
-        .post(url, { payload })
+        .post(url, null, { params: { captchaId } })
         .catch((error) => {
           console.error(error);
           if (cancelRequest) return;

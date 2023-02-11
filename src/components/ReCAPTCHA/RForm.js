@@ -1,6 +1,6 @@
 import React from 'react';
 import Opener from './Opener';
-import './RForm.css';
+// import './RForm.css';
 
 const RForm = () => {
   return (
