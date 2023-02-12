@@ -32,6 +32,7 @@ const ImageSquare = ({
             height={length * 100}
             style={{ objectFit: 'contain', top: `-${y}00%`, left: `-${x}00%` }}
             onClick={() => addAnswer(i + 1)}
+            alt=''
           />
           <div className='rc-image-tile-overlay'></div>
         </div>

@@ -106,6 +106,7 @@ export const ReCaptchaProvider = ({ children }) => {
   useEffect(() => {
     if (!answer || !resultId) return;
     (async () => {
+      console.log(answerPayload);
       setLoading(true);
       await axios
         .post('http://165.22.253.200:9000/api/recaptcha/check', null, {

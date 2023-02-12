@@ -1,5 +1,5 @@
 import useQueryAPI from './hook/useQueryAPI';
-import React, { useEffect } from 'react';
+import React from 'react';
 // import RForm from './components/ReCAPTCHA/RForm';
 import { Route, Routes, Link, Outlet } from 'react-router-dom';
 import RecaptchaForm from './components/ReCAPTCHA/RecaptchaForm';
