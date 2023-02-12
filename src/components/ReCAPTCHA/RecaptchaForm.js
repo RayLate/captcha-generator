@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Button,
   Form,
   FormCheck,
   FormControl,
@@ -7,8 +8,10 @@ import {
   FormLabel,
 } from 'react-bootstrap';
 import RecaptchaCheck from './RecaptchaCheck';
+import { useReCaptcha } from '../../context/RecaptchaContext';
 
-const RecaptchaForm = ({ data }) => {
+const RecaptchaForm = () => {
+  const { setCaptchaId, resetAnswerPayload } = useReCaptcha();
   return (
     <>
       <Form className='p-4 m-4 border' style={{ width: 350 }}>
@@ -54,12 +57,20 @@ const RecaptchaForm = ({ data }) => {
             <FormCheck type={'radio'} label='Green' disabled />
           </FormGroup>
           <FormGroup className='mb-3'></FormGroup>
-          <RecaptchaCheck data={data} />
-          <FormControl
+          <RecaptchaCheck />
+          <Button
             id='recaptcha-demo-submit'
             type='submit'
-            value='Submit'
-          ></FormControl>
+            className='px-3 next-question-button'
+            style={{ borderRadius: 2, textTransform: 'uppercase' }}
+            onClick={(e) => {
+              e.preventDefault();
+              resetAnswerPayload();
+              setCaptchaId(Math.floor(Math.random() * 100) + 1);
+            }}
+          >
+            Next Question
+          </Button>
         </fieldset>
       </Form>
     </>

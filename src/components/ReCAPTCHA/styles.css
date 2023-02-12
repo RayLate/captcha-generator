@@ -1,3 +1,31 @@
+.qs-title {
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+}
+
+.qs-keyword {
+  font-size: 28px;
+  font-weight: bold;
+  display: block;
+}
+.qs-instructions {
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .recaptcha-container .reCAPTCHA-text {
   color: #555;
   font-size: 10px;
@@ -24,10 +52,27 @@
   border-color: #adabab;
   background-color: #dbdbdb;
 }
-
+.rc-image-tile-target {
+  position: relative;
+}
 .rc-image-tile-wrapper img {
   position: relative;
   -webkit-user-drag: none;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+.rc-imageselect-checkbox {
+  background-image: url('../../assets/image/blue-tick.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.rc-separator {
+  border-top: 1px solid #dfdfdf;
+  margin-bottom: 1px;
 }

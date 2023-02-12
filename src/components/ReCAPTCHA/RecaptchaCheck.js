@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import {  Container, Image } from 'react-bootstrap';
+import React, { useRef, useState } from 'react';
+import { Container, Image } from 'react-bootstrap';
 import RecaptchaQuestion from './RecaptchaQuestion';
 import './styles.css';
+import { useReCaptcha } from '../../context/RecaptchaContext';
 
-const RecaptchaCheck = ({ data }) => {
-  const [showQuestion, setShowQuestion] = useState(false);
+const RecaptchaCheck = () => {
+  const [questionPos, setQuestionPos] = useState({ top: 0, left: 0 });
+  const { showQuestion, setShowQuestion, resetAnswerPayload } = useReCaptcha();
+  const ref = useRef(null);
+
   return (
     <>
       <Container
@@ -29,7 +33,15 @@ const RecaptchaCheck = ({ data }) => {
                 height: 32,
                 width: 32,
               }}
-              onClick={() => setShowQuestion(!showQuestion)}
+              ref={ref}
+              onClick={() => {
+                setQuestionPos({
+                  top: ref.current.offsetTop,
+                  left: ref.current.offsetLeft,
+                });
+                resetAnswerPayload();
+                setShowQuestion(!showQuestion);
+              }}
             ></div>
             <span className='px-3' style={{ lineHeight: 2 }}>
               I'm not a robot!
@@ -53,7 +65,7 @@ const RecaptchaCheck = ({ data }) => {
           </div>
         </div>
       </Container>
-      <RecaptchaQuestion showQuestion={showQuestion} data={data} />
+      <RecaptchaQuestion questionPos={questionPos} />
     </>
   );
 };
