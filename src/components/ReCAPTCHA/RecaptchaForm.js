@@ -11,7 +11,12 @@ import RecaptchaCheck from './RecaptchaCheck';
 import { useReCaptcha } from '../../context/RecaptchaContext';
 
 const RecaptchaForm = () => {
-  const { setCaptchaId, resetAnswerPayload } = useReCaptcha();
+  const {
+    setCaptchaId,
+    resetAnswerPayload,
+    result,
+    captchaId,
+  } = useReCaptcha();
   return (
     <>
       <Form className='p-4 m-4 border' style={{ width: 350 }}>
@@ -58,21 +63,54 @@ const RecaptchaForm = () => {
           </FormGroup>
           <FormGroup className='mb-3'></FormGroup>
           <RecaptchaCheck />
-          <Button
-            id='recaptcha-demo-submit'
-            type='submit'
-            className='px-3 next-question-button'
-            style={{ borderRadius: 2, textTransform: 'uppercase' }}
-            onClick={(e) => {
-              e.preventDefault();
-              resetAnswerPayload();
-              setCaptchaId(Math.floor(Math.random() * 100) + 1);
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
-            Next Question
-          </Button>
+            <Button
+              id='recaptcha-demo-previous-question'
+              type='submit'
+              className='px-3 previous-question-button'
+              style={{
+                borderRadius: 2,
+                textTransform: 'uppercase',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                resetAnswerPayload();
+                setCaptchaId(Math.max(1, captchaId - 1));
+              }}
+            >
+              prev
+            </Button>
+            <div id='question-number' className='text-primary'>
+              {captchaId ? `Q${captchaId}` : null}
+            </div>
+            <Button
+              id='recaptcha-demo-next-question'
+              type='submit'
+              className='px-3 next-question-button'
+              style={{
+                borderRadius: 2,
+                textTransform: 'uppercase',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                resetAnswerPayload();
+                setCaptchaId(Math.max(1, captchaId + 1));
+              }}
+            >
+              Next
+            </Button>
+          </div>
         </fieldset>
       </Form>
+      {result.success ? (
+        <div className='score'>{`Jaccard Index: ${result.score}`}</div>
+      ) : null}
     </>
   );
 };

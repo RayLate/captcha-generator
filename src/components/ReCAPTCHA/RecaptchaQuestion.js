@@ -44,21 +44,24 @@ const RecaptchaQuestion = ({ questionPos }) => {
       {loading ? (
         <></>
       ) : (
-        <div
-          className='mask rc-backdrop'
-          hidden={!showQuestion}
-          onClick={() => {
-            resetAnswerPayload();
-            setShowQuestion(false);
-          }}
-        >
+        <div>
+          <div
+            className='mask rc-backdrop'
+            hidden={!showQuestion}
+            onClick={() => {
+              resetAnswerPayload();
+              setShowQuestion(false);
+            }}
+          ></div>
           <div
             className='border bg-white'
             style={{
               position: 'absolute',
               left: questionPos.left + 50,
               top: questionPos.top - 400,
+              zIndex: 1000,
             }}
+            hidden={!showQuestion}
           >
             <div id='iframe-main' className='p-2 '>
               <div className='bg-primary text-white p-3 mb-2 rc-imageselect-instructions'>

@@ -6,7 +6,12 @@ import { useReCaptcha } from '../../context/RecaptchaContext';
 
 const RecaptchaCheck = () => {
   const [questionPos, setQuestionPos] = useState({ top: 0, left: 0 });
-  const { showQuestion, setShowQuestion, resetAnswerPayload } = useReCaptcha();
+  const {
+    showQuestion,
+    setShowQuestion,
+    resetAnswerPayload,
+    resetResult,
+  } = useReCaptcha();
   const ref = useRef(null);
 
   return (
@@ -40,6 +45,7 @@ const RecaptchaCheck = () => {
                   left: ref.current.offsetLeft,
                 });
                 resetAnswerPayload();
+                resetResult();
                 setShowQuestion(!showQuestion);
               }}
             ></div>

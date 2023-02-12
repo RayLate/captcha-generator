@@ -12,8 +12,9 @@ const ReCaptchaContext = createContext({
   removeAnswer: () => {},
   showQuestion: false,
   setShowQuestion: () => {},
-  result: {},
+  result: { score: 0, success: false },
   loading: false,
+  resetResult: () => {},
 });
 
 export const ReCaptchaProvider = ({ children }) => {
@@ -28,7 +29,7 @@ export const ReCaptchaProvider = ({ children }) => {
     resultId: '',
     answer: [],
   });
-  const [result, setResult] = useState({});
+  const [result, setResult] = useState({ score: 0, success: false });
   const [showQuestion, setShowQuestion] = useState(false);
   const [captchaId, setCaptchaId] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -70,6 +71,10 @@ export const ReCaptchaProvider = ({ children }) => {
 
   const resetAnswerPayload = () => {
     setAnswerPayload({ resultId: '', answer: [] });
+  };
+
+  const resetResult = () => {
+    setResult({ score: 0, success: false });
   };
 
   useEffect(() => {
@@ -137,6 +142,8 @@ export const ReCaptchaProvider = ({ children }) => {
         loading,
         setResultId,
         resetAnswerPayload,
+        resetResult,
+        captchaId,
       }}
     >
       {children}
