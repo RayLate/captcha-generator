@@ -1,14 +1,10 @@
-import useQueryAPI from './hook/useQueryAPI';
-import React from 'react';
-// import RForm from './components/ReCAPTCHA/RForm';
+import React, { useState, useEffect } from 'react';
 import { Route, Routes, Link, Outlet } from 'react-router-dom';
 import RecaptchaForm from './components/ReCAPTCHA/RecaptchaForm';
 import { ReCaptchaProvider, useReCaptcha } from './context/RecaptchaContext';
 
 const APITest = () => {
   const { data, setCaptchaId } = useReCaptcha();
-  const { width, length } = data;
-  console.log(width, length);
   return (
     <div className='p-5'>
       <h1>Question: {data.question}</h1>
@@ -20,7 +16,7 @@ const APITest = () => {
         type='button'
         onClick={() => setCaptchaId(Math.floor(Math.random() * 100) + 1)}
       >
-        Next Question
+        Random Question
       </button>
       {/* <RForm /> */}
     </div>
@@ -52,10 +48,23 @@ const Home = () => {
 };
 
 function App() {
-  const { data } = useQueryAPI(
-    'http://165.22.253.200:9000/api/recaptcha/random',
-    1
-  );
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    window.onerror = (errorMessage, source, line, column, errorObject) => {
+      console.log(errorMessage, source, line, column, errorObject);
+      setError(errorObject);
+    };
+  }, []);
+
+  if (error) {
+    return (
+      <div>
+        <h1>An error has occurred</h1>
+        <p>{error.toString()}</p>
+      </div>
+    );
+  }
 
   return (
     <div className='font-roboto'>
@@ -73,7 +82,7 @@ function App() {
             path='/recaptcha'
             element={
               <ReCaptchaProvider>
-                <RecaptchaForm data={data} />
+                <RecaptchaForm />
               </ReCaptchaProvider>
             }
           />
