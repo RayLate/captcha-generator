@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, Link, Outlet } from 'react-router-dom';
+import { Route, Routes, Outlet } from 'react-router-dom';
 import RecaptchaForm from './components/ReCAPTCHA/RecaptchaForm';
 import { ReCaptchaProvider, useReCaptcha } from './context/RecaptchaContext';
+import Container from 'react-bootstrap/Container';
+import { Navbar, Nav } from 'react-bootstrap';
+import { Link as RouterLink } from 'react-router-dom';
+
+const NavLink = ({ to, children }) => (
+  <Nav.Item>
+    <Nav.Link as={RouterLink} to={to}>
+      {children}
+    </Nav.Link>
+  </Nav.Item>
+);
 
 const APITest = () => {
   const { data, setCaptchaId } = useReCaptcha();
@@ -10,37 +21,34 @@ const APITest = () => {
       <h1>Question: {data.question}</h1>
       <p>Result ID: {data.resultId}</p>
       <p>Img URL: {data.img}</p>
-      <img src={`http://165.22.253.200:9000${data.img}`} alt='' />
+      <img
+        src={data.img ? `http://165.22.253.200:9000${data.img}` : null}
+        alt=''
+      />
       <br></br>
-      <button
+      {/* <button
         type='button'
         onClick={() => setCaptchaId(Math.floor(Math.random() * 100) + 1)}
       >
         Random Question
-      </button>
-      {/* <RForm /> */}
+      </button> */}
+      {data ? <strong>API is working</strong> : null}
     </div>
   );
 };
 const Home = () => {
   return (
     <>
-      <nav>
-        <ul>
-          <li>
-            <Link to='/'>Home</Link>
-          </li>
-          <li>
-            <Link to='/api-test'>API Test</Link>
-          </li>
-          <li>
-            <Link to='/recaptcha'>Recaptcha</Link>
-          </li>
-          <li>
-            <Link to='/hcaptcha'>Hcaptcha</Link>
-          </li>
-        </ul>
-      </nav>
+      <Navbar bg='primary' variant='dark'>
+        <Container>
+          <Nav className='me-auto'>
+            <NavLink to='/'>Home</NavLink>
+            <NavLink to='/api-test'>API Test</NavLink>
+            <NavLink to='/recaptcha'>Recaptcha</NavLink>
+            <NavLink to='/hcaptcha'>Hcaptcha</NavLink>
+          </Nav>
+        </Container>
+      </Navbar>
 
       <Outlet />
     </>

@@ -5,7 +5,7 @@ import {
   FormCheck,
   FormControl,
   FormGroup,
-  FormLabel,
+  FormLabel
 } from 'react-bootstrap';
 import RecaptchaCheck from './RecaptchaCheck';
 import { useReCaptcha } from '../../context/RecaptchaContext';
