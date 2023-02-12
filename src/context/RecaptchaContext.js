@@ -59,7 +59,7 @@ export const ReCaptchaProvider = ({ children }) => {
 
   const setResultId = (resultId) => {
     if (resultId && resultId !== answerPayload.resultId) {
-      console.log(resultId);
+      // console.log(resultId);
       setAnswerPayload((prev) => {
         return {
           ...prev,
@@ -92,7 +92,7 @@ export const ReCaptchaProvider = ({ children }) => {
           if (!res) return;
           if (res.data) {
             setData(res.data);
-            console.log(res.data);
+            // console.log(res.data);
           }
         })
         .then(() => {
@@ -118,7 +118,7 @@ export const ReCaptchaProvider = ({ children }) => {
         .then((res) => {
           if (!res) return;
           if (res.data) {
-            console.log(res.data);
+            // console.log(res.data);
             setResult(res.data);
             resetAnswerPayload();
           }
