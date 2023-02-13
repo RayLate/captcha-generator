@@ -32,7 +32,6 @@ const APITest = () => {
       >
         Random Question
       </button> */}
-      {data ? <strong>API is working</strong> : null}
     </div>
   );
 };
