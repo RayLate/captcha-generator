@@ -80,9 +80,7 @@ const RecaptchaQuestion = ({ questionPos }) => {
                 {[...Array(numberOfBox).keys()].map((i) => (
                   <ImageSquare
                     key={i}
-                    src={
-                      data.img ? `http://165.22.253.200:9000${data.img}` : null
-                    }
+                    src={data.img ? `https://165.22.253.200${data.img}` : null}
                     i={i}
                     length={length || 3}
                     width={width || 3}

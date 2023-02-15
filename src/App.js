@@ -21,10 +21,7 @@ const APITest = () => {
       <h1>Question: {data.question}</h1>
       <p>Result ID: {data.resultId}</p>
       <p>Img URL: {data.img}</p>
-      <img
-        src={data.img ? `http://165.22.253.200:9000${data.img}` : null}
-        alt=''
-      />
+      <img src={data.img ? `https://165.22.253.200${data.img}` : null} alt='' />
       <br></br>
       {/* <button
         type='button'
