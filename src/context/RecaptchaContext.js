@@ -82,9 +82,13 @@ export const ReCaptchaProvider = ({ children }) => {
       setLoading(true);
       if (!captchaId) return;
       await axios
-        .post('http://165.22.253.200:9000/api/recaptcha/random', null, {
-          params: { captchaId },
-        })
+        .post(
+          'https://165.22.253.200/api/recaptcha/random',
+          {},
+          {
+            params: { captchaId },
+          }
+        )
         .catch((error) => {
           console.error(error);
         })
@@ -109,7 +113,7 @@ export const ReCaptchaProvider = ({ children }) => {
       console.log(answerPayload);
       setLoading(true);
       await axios
-        .post('http://165.22.253.200:9000/api/recaptcha/check', null, {
+        .post('https://165.22.253.200/api/recaptcha/check', null, {
           params: { answer: answer, resultId: resultId },
         })
         .catch((error) => {
