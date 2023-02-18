@@ -1,0 +1,34 @@
+type Hcaptcha {
+  _id: String!
+  id: Int!
+  img0: String!
+  img1: String!
+  img2: String!
+  img3: String!
+  img4: String!
+  img5: String!
+  img6: String!
+  img7: String!
+  img8: String!
+  height: String!
+  width: String!
+  question: String!
+  answer: [String]!
+}
+
+type Recaptcha {
+  _id: String!
+  id: Int!
+  height: String!
+  width: String!
+  img: String!
+  question: String!
+  answer: [String]!
+}
+
+type Query {
+  getRecaptchaQuestion(id: Int!): Recaptcha
+  validateRecaptchaAnswer(id: Int!, answer: [String]!): Float!
+  getHcaptchaQuestion(id: Int!): Hcaptcha
+  validateHcaptchaAnswer(id: Int!, answer: [String]!): Float!
+}

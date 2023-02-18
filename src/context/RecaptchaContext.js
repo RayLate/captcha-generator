@@ -84,9 +84,14 @@ export const ReCaptchaProvider = ({ children }) => {
       await axios
         .post(
           'https://165.22.253.200/api/recaptcha/random',
-          {},
           {
-            params: { captchaId },
+            captchaId,
+          },
+          {
+            headers: {
+              Accept: '*/*',
+              'Content-Type': 'application/json',
+            },
           }
         )
         .catch((error) => {
@@ -113,9 +118,19 @@ export const ReCaptchaProvider = ({ children }) => {
       console.log(answerPayload);
       setLoading(true);
       await axios
-        .post('https://165.22.253.200/api/recaptcha/check', null, {
-          params: { answer: answer, resultId: resultId },
-        })
+        .post(
+          'https://165.22.253.200/api/recaptcha/check',
+          {
+            answer,
+            resultId,
+          },
+          {
+            headers: {
+              Accept: '*/*',
+              'Content-Type': 'application/json',
+            },
+          }
+        )
         .catch((error) => {
           console.error(error);
         })
