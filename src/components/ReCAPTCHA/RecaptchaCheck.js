@@ -3,15 +3,12 @@ import { Container, Image } from 'react-bootstrap';
 import RecaptchaQuestion from './RecaptchaQuestion';
 import './styles.css';
 import { useReCaptcha } from '../../context/RecaptchaContext';
+import CheckBox from '../template/CheckBox';
 
 const RecaptchaCheck = () => {
   const [questionPos, setQuestionPos] = useState({ top: 0, left: 0 });
-  const {
-    showQuestion,
-    setShowQuestion,
-    resetAnswerPayload,
-    resetResult,
-  } = useReCaptcha();
+  const { showQuestion, setShowQuestion, resetAnswerPayload, resetResult } =
+    useReCaptcha();
   const ref = useRef(null);
 
   return (

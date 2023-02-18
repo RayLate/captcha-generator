@@ -5,6 +5,7 @@ import { ReCaptchaProvider, useReCaptcha } from './context/RecaptchaContext';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link as RouterLink } from 'react-router-dom';
+import HcaptchaForm from './components/HCAPTCHA/HcaptchaForm';
 
 const NavLink = ({ to, children }) => (
   <Nav.Item>
@@ -134,7 +135,7 @@ function App() {
               </ReCaptchaProvider>
             }
           />
-          <Route path='/hcaptcha' element={<>hcaptcha</>} />
+          <Route path='/hcaptcha' element={<HcaptchaForm />} />
         </Route>
       </Routes>
     </div>
