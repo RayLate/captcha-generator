@@ -5,18 +5,14 @@ import {
   FormCheck,
   FormControl,
   FormGroup,
-  FormLabel
+  FormLabel,
 } from 'react-bootstrap';
 import RecaptchaCheck from './RecaptchaCheck';
 import { useReCaptcha } from '../../context/RecaptchaContext';
 
 const RecaptchaForm = () => {
-  const {
-    setCaptchaId,
-    resetAnswerPayload,
-    result,
-    captchaId,
-  } = useReCaptcha();
+  const { setCaptchaId, resetAnswerPayload, result, captchaId } =
+    useReCaptcha();
   return (
     <>
       <Form className='p-4 m-4 border' style={{ width: 350 }}>
@@ -81,7 +77,7 @@ const RecaptchaForm = () => {
               onClick={(e) => {
                 e.preventDefault();
                 resetAnswerPayload();
-                setCaptchaId(Math.max(1, captchaId - 1));
+                setCaptchaId(Math.max(1, +captchaId - 1).toString());
               }}
             >
               prev
@@ -100,7 +96,7 @@ const RecaptchaForm = () => {
               onClick={(e) => {
                 e.preventDefault();
                 resetAnswerPayload();
-                setCaptchaId(Math.max(1, captchaId + 1));
+                setCaptchaId(Math.max(1, +captchaId + 1).toString());
               }}
             >
               Next
@@ -109,7 +105,11 @@ const RecaptchaForm = () => {
         </fieldset>
       </Form>
       {result.success ? (
-        <div className='score'>{`Jaccard Index: ${result.score}`}</div>
+        <div className='score m-4'>
+          <h1
+            style={{ color: result.score < 0.8 ? 'red' : 'green' }}
+          >{`Jaccard Index: ${result.score.toFixed(2)}`}</h1>
+        </div>
       ) : null}
     </>
   );

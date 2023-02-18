@@ -2,37 +2,37 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const ReCaptchaContext = createContext({
-  data: { resultid: '', img: '', question: '', length: 0, width: 0 },
+  data: { id: '', img: '', question: '', height: 1, width: 1 },
   captchaId: 1,
   setCaptchaId: () => {},
   setResultId: () => {},
-  answerPayload: { resultId: '', answer: [] },
+  answerPayload: { id: '', answer: [] },
   resetAnswerPayload: () => {},
   addAnswer: () => {},
   removeAnswer: () => {},
   showQuestion: false,
   setShowQuestion: () => {},
   result: { score: 0, success: false },
-  loading: false,
   resetResult: () => {},
 });
 
+const APP_IP = '';
+
 export const ReCaptchaProvider = ({ children }) => {
   const [data, setData] = useState({
-    resultid: '',
+    id: '',
     img: '',
     question: 'title # keyword # instruction',
-    length: 1,
+    height: 1,
     width: 1,
   });
   const [answerPayload, setAnswerPayload] = useState({
-    resultId: '',
+    id: '',
     answer: [],
   });
   const [result, setResult] = useState({ score: 0, success: false });
   const [showQuestion, setShowQuestion] = useState(false);
-  const [captchaId, setCaptchaId] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [captchaId, setCaptchaId] = useState('1');
 
   const addAnswer = (newAnswer) => {
     // console.log(newAnswer, answer.includes(newAnswer));
@@ -57,96 +57,103 @@ export const ReCaptchaProvider = ({ children }) => {
     }
   };
 
-  const setResultId = (resultId) => {
-    if (resultId && resultId !== answerPayload.resultId) {
-      // console.log(resultId);
+  const setResultId = (id) => {
+    if (id && id !== answerPayload.id) {
+      // console.log(id);
       setAnswerPayload((prev) => {
         return {
           ...prev,
-          resultId: resultId,
+          id: id,
         };
       });
     }
   };
 
   const resetAnswerPayload = () => {
-    setAnswerPayload({ resultId: '', answer: [] });
+    setAnswerPayload({ id: '', answer: [] });
   };
 
   const resetResult = () => {
     setResult({ score: 0, success: false });
   };
 
+  async function graphQLFetch(query, variables = {}) {
+    try {
+      const response = await fetch('http://localhost:3000/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+      });
+      const body = await response.text();
+      const result = JSON.parse(body);
+      if (result.errors) {
+        const error = result.errors[0];
+        if (error.extensions.code === 'BAD_USER_INPUT') {
+          const details = error.extensions.exception.errors.join('\n ');
+          window.alert(`${error.message}:\n ${details}`);
+        } else if (error.extensions.code === 'FORBIDDEN') {
+          window.alert(error.message);
+        } else {
+          window.alert(`${error.extensions.code}: ${error.message}`);
+        }
+      }
+      return result.data;
+    } catch (err) {
+      window.alert(`${err}`);
+    }
+    return undefined;
+  }
+
   useEffect(() => {
     (async () => {
-      setLoading(true);
       if (!captchaId) return;
-      await axios
-        .post(
-          'https://165.22.253.200/api/recaptcha/random',
-          {
-            captchaId,
-          },
-          {
-            headers: {
-              Accept: '*/*',
-              'Content-Type': 'application/json',
-            },
+      const query = `query GetRecaptchaQuestion($getRecaptchaQuestionId: String!) {
+          getRecaptchaQuestion(id: $getRecaptchaQuestionId) {
+            img,height,width,question,id
           }
-        )
+        }`;
+      await graphQLFetch(query, { getRecaptchaQuestionId: captchaId })
         .catch((error) => {
           console.error(error);
         })
         .then((res) => {
           if (!res) return;
-          if (res.data) {
-            setData(res.data);
+          if (res.getRecaptchaQuestion) {
+            setData({
+              ...res.getRecaptchaQuestion,
+              img: `data:image/jpeg;base64, ${res.getRecaptchaQuestion.img}`,
+            });
             // console.log(res.data);
           }
-        })
-        .then(() => {
-          setLoading(false);
         });
     })();
   }, [captchaId]);
 
-  const { answer, resultId } = answerPayload;
+  const { answer, id } = answerPayload;
 
   useEffect(() => {
-    if (!answer || !resultId) return;
+    if (!id) return;
     (async () => {
-      console.log(answerPayload);
-      setLoading(true);
-      await axios
-        .post(
-          'https://165.22.253.200/api/recaptcha/check',
-          {
-            answer,
-            resultId,
-          },
-          {
-            headers: {
-              Accept: '*/*',
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+      const query = `query Query($validateRecaptchaAnswerId: String!, $answer: [String]!) {
+          validateRecaptchaAnswer(id: $validateRecaptchaAnswerId, answer: $answer)
+        }`;
+      await graphQLFetch(query, {
+        validateRecaptchaAnswerId: `${id}`,
+        answer: answer.map((index) => `${index}`),
+      })
         .catch((error) => {
           console.error(error);
         })
         .then((res) => {
           if (!res) return;
-          if (res.data) {
-            // console.log(res.data);
-            setResult(res.data);
+          if (res.validateRecaptchaAnswer) {
+            console.log(res.validateRecaptchaAnswer);
+            setResult({ score: res.validateRecaptchaAnswer, success: true });
             resetAnswerPayload();
           }
-        })
-        .then(() => {
-          setLoading(false);
         });
     })();
-  }, [result, resultId]);
+  }, [id, result]);
 
   return (
     <ReCaptchaContext.Provider
@@ -159,7 +166,6 @@ export const ReCaptchaProvider = ({ children }) => {
         showQuestion,
         setShowQuestion,
         setCaptchaId,
-        loading,
         setResultId,
         resetAnswerPayload,
         resetResult,

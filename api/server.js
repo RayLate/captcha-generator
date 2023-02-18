@@ -24,21 +24,29 @@ let db;
 
 // Recaptcha
 async function getRecaptchaQuestion(_, { id }) {
-  const recaptchaQn = await db.collection('recaptcha').findOne({ id });
+  const recaptchaQn = await db
+    .collection('recaptcha')
+    .findOne({ id: parseInt(id) });
   return recaptchaQn;
 }
 async function validateRecaptchaAnswer(_, { id, answer }) {
-  const recaptchaQn = await db.collection('recaptcha').findOne({ id });
+  const recaptchaQn = await db
+    .collection('recaptcha')
+    .findOne({ id: parseInt(id) });
   return jaccard(new Set([...answer]), new Set([...recaptchaQn.answer]));
 }
 
 // HCaptcha
 async function getHcaptchaQuestion(_, { id }) {
-  const hecaptcha = await db.collection('hcaptcha').findOne({ id });
+  const hecaptcha = await db
+    .collection('hcaptcha')
+    .findOne({ id: parseInt(id) });
   return hecaptcha;
 }
 async function validateHcaptchaAnswer(_, { id, answer }) {
-  const hecaptcha = await db.collection('hcaptcha').findOne({ id });
+  const hecaptcha = await db
+    .collection('hcaptcha')
+    .findOne({ id: parseInt(id) });
   return jaccard(new Set([...answer]), new Set([...hecaptcha.answer]));
 }
 

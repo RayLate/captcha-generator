@@ -7,7 +7,6 @@ const RecaptchaQuestion = ({ questionPos }) => {
   const {
     showQuestion,
     data,
-    loading,
     setShowQuestion,
     setResultId,
     answer,
@@ -29,19 +28,19 @@ const RecaptchaQuestion = ({ questionPos }) => {
     <></>
   );
 
-  const { length, width, resultId } = data;
+  const { height, width, id } = data;
 
-  const numberOfBox = length * width || 9;
+  const numberOfBox = height * width || 9;
 
   const submitResult = () => {
-    setResultId(resultId);
+    setResultId(id);
 
     setShowQuestion(false);
   };
 
   return (
     <>
-      {loading ? (
+      {!data.img ? (
         <></>
       ) : (
         <div>
@@ -71,7 +70,7 @@ const RecaptchaQuestion = ({ questionPos }) => {
                 className=''
                 style={{
                   width: width * 100 + width * 2,
-                  height: length * 100 + length * 2,
+                  height: height * 100 + height * 2,
                   display: 'flex',
                   flexWrap: 'wrap',
                   gap: 2,
@@ -80,9 +79,9 @@ const RecaptchaQuestion = ({ questionPos }) => {
                 {[...Array(numberOfBox).keys()].map((i) => (
                   <ImageSquare
                     key={i}
-                    src={data.img ? `https://165.22.253.200${data.img}` : null}
+                    src={data.img ? `${data.img}` : null}
                     i={i}
-                    length={length || 3}
+                    length={height || 3}
                     width={width || 3}
                     x={i % width}
                     y={Math.floor(i / width)}
