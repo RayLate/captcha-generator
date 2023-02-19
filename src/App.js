@@ -105,9 +105,9 @@ function App() {
               </HCaptchaProvider>
             }
           />
+          <Route path='/slider' element={<p>Slider Placeholder</p>} />
+          <Route path='/icon' element={<p>Icon Placeholder</p>} />
         </Route>
-        <Route path='/slider' element={'Slider Placeholder'} />
-        <Route path='/icon' element={'Icon Placeholder'} />
       </Routes>
     </div>
   );
