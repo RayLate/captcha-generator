@@ -46,10 +46,11 @@ const Home = () => {
             <NavLink to='/api-test'>API Test</NavLink>
             <NavLink to='/recaptcha'>Recaptcha</NavLink>
             <NavLink to='/hcaptcha'>Hcaptcha</NavLink>
+            <NavLink to='/slider'>Geetest-Slider</NavLink>
+            <NavLink to='/icon'>Geetest-Icon</NavLink>
           </Nav>
         </Container>
       </Navbar>
-
       <Outlet />
     </>
   );
@@ -105,6 +106,8 @@ function App() {
             }
           />
         </Route>
+        <Route path='/slider' element={'Slider Placeholder'} />
+        <Route path='/icon' element={'Icon Placeholder'} />
       </Routes>
     </div>
   );
