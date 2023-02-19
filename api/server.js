@@ -9,7 +9,7 @@ const {
 const { Kind } = require('graphql/language');
 const { MongoClient } = require('mongodb');
 
-const PORT = process.env.API_SERVER_PORT || 3000;
+const PORT = process.env.API_SERVER_PORT || 3001;
 const url =
   process.env.MONGODB_URL ||
   'mongodb+srv://badermiy:VPaOKNEk3eSLsktS@cluster0.z6xorqs.mongodb.net/?retryWrites=true&w=majority';

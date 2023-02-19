@@ -26,7 +26,7 @@ const HCaptchaContext = createContext({
   result: { success: false, score: 0 },
   resetContextVariables: () => {},
 });
-const APP_IP = 'http://localhost:3000/graphql';
+const APP_IP = 'http://localhost:3001/graphql';
 export const HCaptchaProvider = ({ children }) => {
   const [data, setData] = useState({
     id: 0,
