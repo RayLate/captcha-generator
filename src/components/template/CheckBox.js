@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import { Container, Image } from 'react-bootstrap';
 const CheckBox = ({
   containerClassName,
-  checkboxClassName,
+  checkBoxId,
+  checkBoxClassName,
   checkBoxOnClickHandler,
   logoSrc,
   checkBoxLabel,
@@ -30,13 +31,19 @@ const CheckBox = ({
         >
           <div style={{ display: 'flex' }}>
             <div
-              className={checkboxClassName}
+              id={checkBoxId}
+              className={checkBoxClassName}
               style={{
                 height: 32,
                 width: 32,
               }}
               ref={ref}
-              onClick={checkBoxOnClickHandler}
+              onClick={() =>
+                checkBoxOnClickHandler(
+                  ref.current.offsetTop,
+                  ref.current.offsetLeft
+                )
+              }
             ></div>
             <span className='px-3' style={{ lineHeight: 2 }}>
               {checkBoxLabel}

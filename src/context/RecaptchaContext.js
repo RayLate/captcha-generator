@@ -1,22 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 
 const ReCaptchaContext = createContext({
   data: { id: '', img: '', question: '', height: 1, width: 1 },
   captchaId: 1,
   setCaptchaId: () => {},
   setResultId: () => {},
-  answerPayload: { id: '', answer: [] },
-  resetAnswerPayload: () => {},
-  addAnswer: () => {},
-  removeAnswer: () => {},
   showQuestion: false,
   setShowQuestion: () => {},
+  answer: [],
+  setAnswer: () => {},
   result: { score: 0, success: false },
-  resetResult: () => {},
+  resetContextVariables: () => {},
 });
 
-const APP_IP = '';
+const APP_IP = 'http://localhost:3000/graphql';
 
 export const ReCaptchaProvider = ({ children }) => {
   const [data, setData] = useState({
@@ -26,60 +23,19 @@ export const ReCaptchaProvider = ({ children }) => {
     height: 1,
     width: 1,
   });
-  const [answerPayload, setAnswerPayload] = useState({
-    id: '',
-    answer: [],
-  });
+  const [answer, setAnswer] = useState(undefined);
   const [result, setResult] = useState({ score: 0, success: false });
   const [showQuestion, setShowQuestion] = useState(false);
-  const [captchaId, setCaptchaId] = useState('1');
+  const [captchaId, setCaptchaId] = useState('0');
 
-  const addAnswer = (newAnswer) => {
-    // console.log(newAnswer, answer.includes(newAnswer));
-    if (!answerPayload.answer.includes(newAnswer)) {
-      setAnswerPayload((prev) => {
-        return {
-          ...prev,
-          answer: [...prev.answer, newAnswer],
-        };
-      });
-    }
-  };
-
-  const removeAnswer = (newAnswer) => {
-    if (answerPayload.answer.includes(newAnswer)) {
-      setAnswerPayload((prev) => {
-        return {
-          ...prev,
-          answer: [...prev.answer.filter((x) => x !== newAnswer)],
-        };
-      });
-    }
-  };
-
-  const setResultId = (id) => {
-    if (id && id !== answerPayload.id) {
-      // console.log(id);
-      setAnswerPayload((prev) => {
-        return {
-          ...prev,
-          id: id,
-        };
-      });
-    }
-  };
-
-  const resetAnswerPayload = () => {
-    setAnswerPayload({ id: '', answer: [] });
-  };
-
-  const resetResult = () => {
-    setResult({ score: 0, success: false });
+  const resetContextVariables = () => {
+    setAnswer(undefined);
+    setResult({ success: false, score: 0 });
   };
 
   async function graphQLFetch(query, variables = {}) {
     try {
-      const response = await fetch('http://localhost:3000/graphql', {
+      const response = await fetch(APP_IP, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, variables }),
@@ -123,37 +79,36 @@ export const ReCaptchaProvider = ({ children }) => {
               ...res.getRecaptchaQuestion,
               img: `data:image/jpeg;base64, ${res.getRecaptchaQuestion.img}`,
             });
-            // console.log(res.data);
           }
         });
     })();
   }, [captchaId]);
 
-  const { answer, id } = answerPayload;
-
   useEffect(() => {
-    if (!id) return;
+    if (!captchaId || answer === undefined) return;
     (async () => {
       const query = `query Query($validateRecaptchaAnswerId: String!, $answer: [String]!) {
           validateRecaptchaAnswer(id: $validateRecaptchaAnswerId, answer: $answer)
         }`;
       await graphQLFetch(query, {
-        validateRecaptchaAnswerId: `${id}`,
-        answer: answer.map((index) => `${index}`),
+        validateRecaptchaAnswerId: `${captchaId}`,
+        answer: answer,
       })
         .catch((error) => {
           console.error(error);
         })
         .then((res) => {
           if (!res) return;
-          if (res.validateRecaptchaAnswer) {
-            console.log(res.validateRecaptchaAnswer);
+          if (
+            res.validateRecaptchaAnswer ||
+            res.validateRecaptchaAnswer === 0
+          ) {
             setResult({ score: res.validateRecaptchaAnswer, success: true });
-            resetAnswerPayload();
+            setAnswer(undefined);
           }
         });
     })();
-  }, [id, result]);
+  }, [captchaId, answer]);
 
   return (
     <ReCaptchaContext.Provider
@@ -161,15 +116,12 @@ export const ReCaptchaProvider = ({ children }) => {
         data,
         answer,
         result,
-        addAnswer,
-        removeAnswer,
+        captchaId,
+        setCaptchaId,
         showQuestion,
         setShowQuestion,
-        setCaptchaId,
-        setResultId,
-        resetAnswerPayload,
-        resetResult,
-        captchaId,
+        setAnswer,
+        resetContextVariables,
       }}
     >
       {children}

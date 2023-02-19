@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ImageSquare from './ImageSquare';
 import { useReCaptcha } from '../../context/RecaptchaContext';
+import QuestionModal from '../template/QuestionModal';
 
-const RecaptchaQuestion = ({ questionPos }) => {
-  const {
-    showQuestion,
-    data,
-    setShowQuestion,
-    setResultId,
-    answer,
-    addAnswer,
-    removeAnswer,
-    resetAnswerPayload,
-  } = useReCaptcha();
+const RecaptchaQuestion = ({ questionPos, showQuestion, setShowQuestion }) => {
+  const { data, setAnswer, resetContextVariables } = useReCaptcha();
+
+  const [selected, setSelected] = useState([]);
 
   const question = data.question ? (
     data.question.split('#').map((text, i) => {
@@ -28,14 +22,20 @@ const RecaptchaQuestion = ({ questionPos }) => {
     <></>
   );
 
-  const { height, width, id } = data;
+  const { height, width } = data;
 
   const numberOfBox = height * width || 9;
 
-  const submitResult = () => {
-    setResultId(id);
-
-    setShowQuestion(false);
+  const imageOnClickHandler = (id) => {
+    if (selected.includes(id)) {
+      setSelected((prev) => {
+        return [...prev.filter((x) => x !== id)];
+      });
+    } else {
+      setSelected((prev) => {
+        return [...prev, id];
+      });
+    }
   };
 
   return (
@@ -43,15 +43,11 @@ const RecaptchaQuestion = ({ questionPos }) => {
       {!data.img ? (
         <></>
       ) : (
-        <div>
-          <div
-            className='mask rc-backdrop'
-            hidden={!showQuestion}
-            onClick={() => {
-              resetAnswerPayload();
-              setShowQuestion(false);
-            }}
-          ></div>
+        <QuestionModal
+          showQuestion={showQuestion}
+          setShowQuestion={setShowQuestion}
+          resetContext={resetContextVariables}
+        >
           <div
             className='border bg-white'
             style={{
@@ -60,7 +56,6 @@ const RecaptchaQuestion = ({ questionPos }) => {
               top: questionPos.top - 400,
               zIndex: 1000,
             }}
-            hidden={!showQuestion}
           >
             <div id='iframe-main' className='p-2 '>
               <div className='bg-primary text-white p-3 mb-2 rc-imageselect-instructions'>
@@ -85,9 +80,8 @@ const RecaptchaQuestion = ({ questionPos }) => {
                     width={width || 3}
                     x={i % width}
                     y={Math.floor(i / width)}
-                    answer={answer}
-                    addAnswer={addAnswer}
-                    removeAnswer={removeAnswer}
+                    selected={selected}
+                    imageOnClickHandler={imageOnClickHandler}
                   />
                 ))}
               </div>
@@ -103,7 +97,11 @@ const RecaptchaQuestion = ({ questionPos }) => {
                     id='recaptcha-verify-button'
                     className='rc-button-default goog-inline-block px-4 py-2 my-2'
                     style={{ borderRadius: 2, textTransform: 'uppercase' }}
-                    onClick={submitResult}
+                    onClick={() => {
+                      setAnswer([...selected.map((i) => `${i}`)]);
+                      setSelected([]);
+                      setShowQuestion(false);
+                    }}
                   >
                     Verify
                   </Button>
@@ -111,7 +109,7 @@ const RecaptchaQuestion = ({ questionPos }) => {
               </div>
             </div>
           </div>
-        </div>
+        </QuestionModal>
       )}
     </>
   );

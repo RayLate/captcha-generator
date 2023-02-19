@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   Form,
   FormCheck,
   FormControl,
@@ -9,10 +8,10 @@ import {
 } from 'react-bootstrap';
 import RecaptchaCheck from './RecaptchaCheck';
 import { useReCaptcha } from '../../context/RecaptchaContext';
+import QuestionNavigator from '../template/QuestionNavigator';
 
 const RecaptchaForm = () => {
-  const { setCaptchaId, resetAnswerPayload, result, captchaId } =
-    useReCaptcha();
+  const { setCaptchaId, resetContextVariables, captchaId } = useReCaptcha();
   return (
     <>
       <Form className='p-4 m-4 border' style={{ width: 350 }}>
@@ -59,58 +58,13 @@ const RecaptchaForm = () => {
           </FormGroup>
           <FormGroup className='mb-3'></FormGroup>
           <RecaptchaCheck />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              id='recaptcha-demo-previous-question'
-              type='submit'
-              className='px-3 previous-question-button'
-              style={{
-                borderRadius: 2,
-                textTransform: 'uppercase',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                resetAnswerPayload();
-                setCaptchaId(Math.max(1, +captchaId - 1).toString());
-              }}
-            >
-              prev
-            </Button>
-            <div id='question-number' className='text-primary'>
-              {captchaId ? `Q${captchaId}` : null}
-            </div>
-            <Button
-              id='recaptcha-demo-next-question'
-              type='submit'
-              className='px-3 next-question-button'
-              style={{
-                borderRadius: 2,
-                textTransform: 'uppercase',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                resetAnswerPayload();
-                setCaptchaId(Math.max(1, +captchaId + 1).toString());
-              }}
-            >
-              Next
-            </Button>
-          </div>
+          <QuestionNavigator
+            setCaptchaId={setCaptchaId}
+            captchaId={captchaId}
+            resetContext={resetContextVariables}
+          />
         </fieldset>
       </Form>
-      {result.success ? (
-        <div className='score m-4'>
-          <h1
-            style={{ color: result.score < 0.8 ? 'red' : 'green' }}
-          >{`Jaccard Index: ${result.score.toFixed(2)}`}</h1>
-        </div>
-      ) : null}
     </>
   );
 };

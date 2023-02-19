@@ -7,11 +7,10 @@ const ImageSquare = ({
   width,
   x,
   y,
-  answer,
-  addAnswer,
-  removeAnswer,
+  imageOnClickHandler,
+  selected,
 }) => {
-  const isSelected = answer.includes(i + 1);
+  const isSelected = selected.includes(i + 1);
   return (
     <>
       <div className='rc-image-tile-target'>
@@ -31,7 +30,7 @@ const ImageSquare = ({
             width={width * 100}
             height={length * 100}
             style={{ objectFit: 'contain', top: `-${y}00%`, left: `-${x}00%` }}
-            onClick={() => addAnswer(i + 1)}
+            onClick={() => imageOnClickHandler(i + 1)}
             alt=''
           />
           <div className='rc-image-tile-overlay'></div>
@@ -39,7 +38,7 @@ const ImageSquare = ({
         <div
           className='rc-imageselect-checkbox'
           hidden={!isSelected}
-          onClick={() => removeAnswer(i + 1)}
+          onClick={() => imageOnClickHandler(i + 1)}
         ></div>
       </div>
     </>

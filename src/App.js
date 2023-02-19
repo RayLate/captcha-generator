@@ -6,6 +6,9 @@ import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link as RouterLink } from 'react-router-dom';
 import HcaptchaForm from './components/HCAPTCHA/HcaptchaForm';
+import { HCaptchaProvider } from './context/HcaptchaContext';
+import HcaptchaAnswer from './components/HCAPTCHA/HcaptchaAnswer';
+import RecaptchaAnswer from './components/ReCAPTCHA/RecaptchaAnswer';
 
 const NavLink = ({ to, children }) => (
   <Nav.Item>
@@ -15,52 +18,8 @@ const NavLink = ({ to, children }) => (
   </Nav.Item>
 );
 
-async function graphQLFetch(query, variables = {}) {
-  try {
-    const response = await fetch('http://localhost:3000/graphql', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables }),
-    });
-    const body = await response.text();
-    const result = JSON.parse(body);
-    if (result.errors) {
-      const error = result.errors[0];
-      if (error.extensions.code === 'BAD_USER_INPUT') {
-        const details = error.extensions.exception.errors.join('\n ');
-        window.alert(`${error.message}:\n ${details}`);
-      } else if (error.extensions.code === 'FORBIDDEN') {
-        window.alert(error.message);
-      } else {
-        window.alert(`${error.extensions.code}: ${error.message}`);
-      }
-    }
-    return result.data;
-  } catch (err) {
-    window.alert(`${err}`);
-  }
-  return undefined;
-}
-
 const APITest = () => {
-  const UI_URL = 'http://localhost:3000/graphql';
   const { data, setCaptchaId } = useReCaptcha();
-  // const [data, setData] = useState({});
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const query = `query GetRecaptchaQuestion($getRecaptchaQuestionId: String!) {
-  //         getRecaptchaQuestion(id: $getRecaptchaQuestionId) {
-  //           img,height,width,question
-  //         }
-  //       }`;
-  //     const res = await graphQLFetch(query, { getRecaptchaQuestionId: '1' });
-  //     console.log(res.getRecaptchaQuestion);
-  //     setData(res.getRecaptchaQuestion);
-  //   }
-  //   fetchData();
-  // }, []);
-
   return (
     <div className='p-5'>
       <h1>Question: {data.question}</h1>
@@ -132,10 +91,19 @@ function App() {
             element={
               <ReCaptchaProvider>
                 <RecaptchaForm />
+                <RecaptchaAnswer />
               </ReCaptchaProvider>
             }
           />
-          <Route path='/hcaptcha' element={<HcaptchaForm />} />
+          <Route
+            path='/hcaptcha'
+            element={
+              <HCaptchaProvider>
+                <HcaptchaForm />
+                <HcaptchaAnswer />
+              </HCaptchaProvider>
+            }
+          />
         </Route>
       </Routes>
     </div>
