@@ -13,7 +13,10 @@ const ReCaptchaContext = createContext({
   resetContextVariables: () => {},
 });
 
-const APP_IP = 'http://localhost:5000/graphql';
+const APP_IP =
+  process.env.NODE_ENV === 'production'
+    ? 'http://172.31.24.118:5000/graphql'
+    : 'http://localhost:5000/graphql';
 
 export const ReCaptchaProvider = ({ children }) => {
   const [data, setData] = useState({
