@@ -89,7 +89,7 @@ async function startServer() {
   await connectToDb();
 
   app.listen(PORT, () => {
-    console.log(`API started on port localhost:${PORT}`);
+    console.log(`API started on port - ${PORT}`);
   });
 }
 
