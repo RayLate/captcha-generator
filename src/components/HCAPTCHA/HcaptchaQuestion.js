@@ -12,9 +12,8 @@ const HcaptchaQuestion = ({ questionPos, showQuestion, setShowQuestion }) => {
     return { id: key[key.length - 1], img: data[key] };
   });
 
-  const answerImageKey = filteredKeys.find((key) =>
-    data.answer.includes((+key[key.length - 1] - 1).toString())
-  );
+  const answerImageKey = data.answer ? data.answer[0] : undefined;
+
   const imageOnClickHandler = (id) => {
     if (selected.includes(id)) {
       setSelected((prev) => {
@@ -65,7 +64,9 @@ const HcaptchaQuestion = ({ questionPos, showQuestion, setShowQuestion }) => {
                   <div className='image ' style={{ height: 90, width: 90 }}>
                     {answerImageKey ? (
                       <Image
-                        src={`data:image/jpeg;base64, ${data[answerImageKey]}`}
+                        src={`data:image/jpeg;base64, ${
+                          data[`img${+answerImageKey-1}`]
+                        }`}
                         fluid={true}
                         alt='hint'
                       />

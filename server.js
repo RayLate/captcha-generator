@@ -1,15 +1,11 @@
 const fs = require('fs');
 require('dotenv').config();
 const express = require('express');
-const {
-  ApolloServer,
-} = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const { MongoClient } = require('mongodb');
-
+const path = require('path');
 const PORT = process.env.API_SERVER_PORT || 5000;
-const url =
-  process.env.MONGODB_URL ||
-  'mongodb+srv://badermiy:VPaOKNEk3eSLsktS@cluster0.z6xorqs.mongodb.net/?retryWrites=true&w=majority';
+const url = process.env.MONGODB_URL;
 const enableCors = (process.env.ENABLE_CORS || 'true') === 'true';
 console.log('CORS setting:', enableCors);
 
@@ -78,6 +74,12 @@ const server = new ApolloServer({
     console.log(error);
     return error;
   },
+});
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 async function startServer() {
