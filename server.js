@@ -1,6 +1,7 @@
 const fs = require('fs');
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const { MongoClient } = require('mongodb');
 const path = require('path');
@@ -82,6 +83,15 @@ if (process.env.NODE_ENV === 'production') {
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });
+} else {
+  // disable cors during development
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      methods: ['GET', 'POST'],
+      allowedHeaders: ['Content-Type'],
+    })
+  );
 }
 
 async function startServer() {
