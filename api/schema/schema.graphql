@@ -26,9 +26,24 @@ type Recaptcha {
   answer: [String]!
 }
 
+type SliceCssAttributes {
+  width: String!
+  height: String!
+  top: String!
+}
+
+type Slider {
+  _id: String!
+  id: Int!
+  slice_css_attributes: SliceCssAttributes!
+  background_src: String!
+  slice_src: String!
+}
+
 type Query {
   getRecaptchaQuestion(id: String!): Recaptcha
   validateRecaptchaAnswer(id: String!, answer: [String]!): Float!
   getHcaptchaQuestion(id: String!): Hcaptcha
   validateHcaptchaAnswer(id: String!, answer: [String]!): Float!
+  getSliderQuestion(id: String!): Slider
 }

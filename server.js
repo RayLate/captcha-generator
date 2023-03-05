@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
   // disable cors during development
   app.use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
       methods: ['GET', 'POST'],
       allowedHeaders: ['Content-Type'],
     })

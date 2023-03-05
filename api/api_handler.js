@@ -9,6 +9,7 @@ const {
   getHcaptchaQuestion,
   validateHcaptchaAnswer,
 } = require('./hcaptcha.js');
+const { getSliderQuestion } = require('./slider.js');
 
 const resolvers = {
   Query: {
@@ -16,6 +17,7 @@ const resolvers = {
     validateRecaptchaAnswer,
     getHcaptchaQuestion,
     validateHcaptchaAnswer,
+    getSliderQuestion,
   },
 };
 
@@ -27,7 +29,6 @@ const server = new ApolloServer({
     console.log(error);
     return error;
   },
-  playground: true,
 });
 
 async function installAPI(app) {
