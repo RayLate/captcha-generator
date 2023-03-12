@@ -9,6 +9,8 @@ import HcaptchaForm from './components/HCAPTCHA/HcaptchaForm';
 import { HCaptchaProvider } from './context/HcaptchaContext';
 import HcaptchaAnswer from './components/HCAPTCHA/HcaptchaAnswer';
 import RecaptchaAnswer from './components/ReCAPTCHA/RecaptchaAnswer';
+import { SliderCaptchaProvider } from './context/SliderContext';
+import SliderForm from './components/SliderCAPTCHA/SliderForm';
 
 const NavLink = ({ to, children }) => (
   <Nav.Item>
@@ -105,7 +107,14 @@ function App() {
               </HCaptchaProvider>
             }
           />
-          <Route path='/slider' element={<p>Slider Placeholder</p>} />
+          <Route
+            path='/slider'
+            element={
+              <SliderCaptchaProvider>
+                <SliderForm />
+              </SliderCaptchaProvider>
+            }
+          />
           <Route path='/icon' element={<p>Icon Placeholder</p>} />
         </Route>
       </Routes>

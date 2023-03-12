@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
+import { graphQLFetch } from './api';
 const HCaptchaContext = createContext({
   data: {
     id: 0,
@@ -17,7 +17,7 @@ const HCaptchaContext = createContext({
     question: '',
     answer: [],
   },
-  hcaptchaId: 1,
+  hcaptchaId: '',
   setCaptchaId: () => {},
   showQuestion: false,
   setShowQuestion: () => {},
@@ -26,10 +26,7 @@ const HCaptchaContext = createContext({
   result: { success: false, score: 0 },
   resetContextVariables: () => {},
 });
-const APP_IP =
-  process.env.NODE_ENV === 'production'
-    ? 'http://172.31.24.118:5000/graphql'
-    : 'http://localhost:5000/graphql';
+
 export const HCaptchaProvider = ({ children }) => {
   const [data, setData] = useState({
     id: 0,
@@ -55,33 +52,6 @@ export const HCaptchaProvider = ({ children }) => {
   function resetContextVariables() {
     setAnswer(undefined);
     setResult({ success: false, score: 0 });
-  }
-
-  async function graphQLFetch(query, variables = {}) {
-    try {
-      const response = await fetch(APP_IP, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, variables }),
-      });
-      const body = await response.text();
-      const result = JSON.parse(body);
-      if (result.errors) {
-        const error = result.errors[0];
-        if (error.extensions.code === 'BAD_USER_INPUT') {
-          const details = error.extensions.exception.errors.join('\n ');
-          window.alert(`${error.message}:\n ${details}`);
-        } else if (error.extensions.code === 'FORBIDDEN') {
-          window.alert(error.message);
-        } else {
-          window.alert(`${error.extensions.code}: ${error.message}`);
-        }
-      }
-      return result.data;
-    } catch (err) {
-      window.alert(`${err}`);
-    }
-    return undefined;
   }
 
   useEffect(() => {
