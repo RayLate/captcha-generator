@@ -4,8 +4,9 @@ import { useSlider } from '../../context/SliderContext';
 import { ArrowRightShort } from 'react-bootstrap-icons';
 
 import './styles.css';
+import QuestionNavigator from '../template/QuestionNavigator';
 const SliderForm = () => {
-  const { data } = useSlider();
+  const { data, sliderId, setSliderId, setTrueAnsPayload } = useSlider();
   const [position, setPosition] = useState({ initX: 0, initY: 0, x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
 
@@ -26,7 +27,7 @@ const SliderForm = () => {
   useEffect(() => {
     const handleMouseUp = (event) => {
       setDragging(false);
-      document.body.style.userSelect = 'all';
+      document.body.style.userSelect = 'auto';
     };
 
     document.addEventListener('mouseup', handleMouseUp);
@@ -148,12 +149,29 @@ const SliderForm = () => {
             Question _id: {data._id}
             <br />
             Question Result:{' '}
-            <span className={data.result ? 'text-success' : 'text-danger'}>
-              {data.result ?? 'not set yet'}
+            <span className={data.answer ? 'text-success' : 'text-danger'}>
+              {data.answer ?? 'not set yet'}
             </span>
           </Card.Text>
           <Card.Text>TranslateX Postion: {position.x}</Card.Text>
-          <Button variant='primary'>Save Answer</Button>
+          <Button
+            variant='primary mb-3'
+            onClick={() =>
+              setTrueAnsPayload({
+                id: data._id,
+                answer: parseInt(position.x),
+              })
+            }
+          >
+            Save Answer
+          </Button>
+          <QuestionNavigator
+            resetContext={() => {
+              setPosition({ initX: 0, initY: 0, x: 0, y: 0 });
+            }}
+            setCaptchaId={setSliderId}
+            captchaId={sliderId}
+          />
         </Card.Body>
       </Card>
     </>

@@ -16,6 +16,8 @@ const SliderContext = createContext({
   },
   sliderId: '',
   setSliderId: () => {},
+  resetContextVariables: () => {},
+  setTrueAnsPayload: () => {},
 });
 
 export const SliderCaptchaProvider = ({ children }) => {
@@ -32,6 +34,14 @@ export const SliderCaptchaProvider = ({ children }) => {
     answer: undefined,
   });
   const [sliderId, setSliderId] = useState('0');
+  const [trueAnsPayload, setTrueAnsPayload] = useState({
+    id: undefined,
+    answer: undefined,
+  });
+
+  function resetContextVariables() {
+    setTrueAnsPayload({ id: undefined, answer: undefined });
+  }
 
   useEffect(() => {
     (async () => {
@@ -66,12 +76,35 @@ export const SliderCaptchaProvider = ({ children }) => {
     })();
   }, [sliderId]);
 
+  useEffect(() => {
+    (async () => {
+      if (!trueAnsPayload.answer || !trueAnsPayload.id) return;
+      const query = `mutation Mutation($id: String!, $answer: Int!) {
+                updateSliderAnswer(id: $id, answer: $answer)
+                }`;
+      await graphQLFetch(query, {
+        id: trueAnsPayload.id,
+        answer: trueAnsPayload.answer,
+      })
+        .catch((error) => console.error(error))
+        .then((res) => {
+          if (!res) return;
+          if (res.updateSliderAnswer) {
+            setData((prev) => ({ ...prev, answer: trueAnsPayload.answer }));
+            console.log(trueAnsPayload.id, 'Updated Successfully');
+          }
+        });
+    })();
+  }, [trueAnsPayload]);
+
   return (
     <SliderContext.Provider
       value={{
         data,
         sliderId,
         setSliderId,
+        resetContextVariables,
+        setTrueAnsPayload,
       }}
     >
       {children}
