@@ -1,5 +1,5 @@
 type Hcaptcha {
-  _id: String!
+  _id: ID!
   id: Int!
   img0: String!
   img1: String!
@@ -17,7 +17,7 @@ type Hcaptcha {
 }
 
 type Recaptcha {
-  _id: String!
+  _id: ID!
   id: Int!
   height: String!
   width: String!
@@ -33,11 +33,12 @@ type SliceCssAttributes {
 }
 
 type Slider {
-  _id: String!
+  _id: ID!
   id: Int!
   slice_css_attributes: SliceCssAttributes!
   background_src: String!
   slice_src: String!
+  answer: Int
 }
 
 type Query {
@@ -46,4 +47,8 @@ type Query {
   getHcaptchaQuestion(id: String!): Hcaptcha
   validateHcaptchaAnswer(id: String!, answer: [String]!): Float!
   getSliderQuestion(id: String!): Slider
+}
+
+type Mutation {
+  updateSliderAnswer(id: String!, answer: Int!): Boolean
 }

@@ -1,0 +1,15 @@
+.geetest_btn {
+  background-image: linear-gradient(
+    180deg,
+    hsla(224, 98%, 71%, 1) 0%,
+    hsla(224, 98%, 66%, 1) 100%
+  );
+}
+
+.geetest_btn:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsla(224, 98%, 71%, 1) 100%,
+    hsla(224, 98%, 66%, 1) 0%
+  );
+}

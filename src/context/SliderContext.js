@@ -3,6 +3,7 @@ import { graphQLFetch } from './api';
 
 const SliderContext = createContext({
   data: {
+    _id: '',
     id: 0,
     slice_css_attributes: {
       width: '',
@@ -11,6 +12,7 @@ const SliderContext = createContext({
     },
     background_src: '',
     slice_src: '',
+    answer: 0,
   },
   sliderId: '',
   setSliderId: () => {},
@@ -18,6 +20,7 @@ const SliderContext = createContext({
 
 export const SliderCaptchaProvider = ({ children }) => {
   const [data, setData] = useState({
+    _id: '',
     id: 0,
     slice_css_attributes: {
       width: '',
@@ -26,6 +29,7 @@ export const SliderCaptchaProvider = ({ children }) => {
     },
     background_src: '',
     slice_src: '',
+    answer: undefined,
   });
   const [sliderId, setSliderId] = useState('0');
 
@@ -34,6 +38,7 @@ export const SliderCaptchaProvider = ({ children }) => {
       if (!sliderId) return;
       const query = `query GetSliderQuestion($getSliderQuestionId: String!) {
             getSliderQuestion(id: $getSliderQuestionId) {
+                _id
                 id
                 slice_css_attributes {
                 width
@@ -42,6 +47,7 @@ export const SliderCaptchaProvider = ({ children }) => {
                 }
                 background_src
                 slice_src
+                answer
             }
         }`;
       await graphQLFetch(query, { getSliderQuestionId: sliderId })

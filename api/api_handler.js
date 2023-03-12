@@ -9,7 +9,7 @@ const {
   getHcaptchaQuestion,
   validateHcaptchaAnswer,
 } = require('./hcaptcha.js');
-const { getSliderQuestion } = require('./slider.js');
+const { getSliderQuestion, updateSliderAnswer } = require('./slider.js');
 
 const resolvers = {
   Query: {
@@ -18,6 +18,9 @@ const resolvers = {
     getHcaptchaQuestion,
     validateHcaptchaAnswer,
     getSliderQuestion,
+  },
+  Mutation: {
+    updateSliderAnswer,
   },
 };
 
