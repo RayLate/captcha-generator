@@ -1,6 +1,6 @@
 export const APP_IP =
   process.env.NODE_ENV === 'production'
-    ? 'http://172.31.24.118:5000/graphql'
+    ? 'http://54.255.145.98/graphql'
     : 'http://localhost:5000/graphql';
 
 export async function graphQLFetch(query, variables = {}) {
