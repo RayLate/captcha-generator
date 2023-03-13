@@ -7,7 +7,7 @@ const path = require('path');
 const PORT = process.env.API_SERVER_PORT || 5000;
 
 const app = express();
-
+console.log('running on', process.env.NODE_ENV, 'environment');
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'build')));
 
